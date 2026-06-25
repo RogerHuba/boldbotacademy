@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  html, body {
+    background: #0A0A0B;
+    color: #F5F5F7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+  }
+  ::selection { background: rgba(59, 130, 246, 0.35); }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-border bg-bg-card p-6;
+  }
+  .card-raised {
+    @apply rounded-2xl border border-border bg-bg-raised p-6;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-bg-raised px-4 py-2.5 text-sm font-medium text-fg transition hover:bg-bg-hover disabled:opacity-50;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-fg-muted transition hover:bg-bg-hover hover:text-fg;
+  }
+  .input {
+    @apply h-11 w-full rounded-xl border border-border bg-bg-card px-4 text-sm text-fg outline-none placeholder:text-fg-subtle focus:border-brand;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-border bg-bg-raised px-2.5 py-1 text-xs font-medium text-fg-muted;
+  }
+  .chip-success { @apply border-success/40 bg-success/10 text-success; }
+  .chip-warning { @apply border-warning/40 bg-warning/10 text-warning; }
+  .chip-danger { @apply border-danger/40 bg-danger/10 text-danger; }
+  .chip-brand { @apply border-brand/40 bg-brand/10 text-brand-hover; }
+}
