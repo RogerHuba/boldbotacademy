@@ -2,6 +2,15 @@ import Link from "next/link";
 import { requireStudent } from "@/lib/gating";
 import { createClient } from "@/lib/supabase/server";
 import { DAYS, dayMeta } from "@/content/days";
+import type { DayKey } from "@/content/types";
+
+const DAY_PATH: Record<DayKey, string> = {
+  day_0: "/day-0",
+  day_1: "/day-1",
+  day_1_setup: "/day-1/setup",
+  day_2: "/day-2",
+  day_3: "/day-3",
+};
 import { LESSONS } from "@/content/lessons";
 import { ZOOM_SCHEDULE } from "@/content/announcements";
 import { TEAM } from "@/content/team";
@@ -188,15 +197,8 @@ export default async function DashboardPage() {
           {DAYS.map((d) => {
             const pct = dayCompletionPct(state, d.key);
             const unlocked = state.unlocked[d.key];
-            return (
-              <Link
-                key={d.key}
-                href={unlocked ? `/${d.key.replace("_", "-")}` : "#"}
-                onClick={(e) => !unlocked && e.preventDefault()}
-                className={`flex items-center gap-4 rounded-xl border border-border px-4 py-3 transition ${
-                  unlocked ? "hover:bg-bg-hover" : "opacity-50"
-                }`}
-              >
+            const inner = (
+              <>
                 <div className="w-20 text-xs font-semibold uppercase tracking-wider text-fg-subtle">
                   {d.label}
                 </div>
@@ -210,7 +212,19 @@ export default async function DashboardPage() {
                   </div>
                 </div>
                 <div className="w-10 text-right text-xs text-fg-muted">{pct}%</div>
+              </>
+            );
+            const cls = `flex items-center gap-4 rounded-xl border border-border px-4 py-3 transition ${
+              unlocked ? "hover:bg-bg-hover" : "cursor-not-allowed opacity-50"
+            }`;
+            return unlocked ? (
+              <Link key={d.key} href={DAY_PATH[d.key]} className={cls}>
+                {inner}
               </Link>
+            ) : (
+              <div key={d.key} className={cls} aria-disabled="true">
+                {inner}
+              </div>
             );
           })}
         </div>

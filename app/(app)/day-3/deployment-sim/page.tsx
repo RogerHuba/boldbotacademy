@@ -30,25 +30,35 @@ export default async function Page() {
 
       <Checklist checklist={checklist} lessonSlug={lesson.slug} initial={initial} />
 
-      <Link
-        href="/day-3/deploy"
-        onClick={(e) => !allChecked && e.preventDefault()}
-        className={`flex items-center justify-between rounded-2xl border px-5 py-4 transition ${
+      {(() => {
+        const cls = `flex items-center justify-between rounded-2xl border px-5 py-4 transition ${
           allChecked
             ? "border-brand bg-brand/15 hover:bg-brand/25"
-            : "border-border bg-bg-card opacity-60"
-        }`}
-      >
-        <div>
-          <div className="font-display text-lg font-semibold">Ready to deploy</div>
-          <div className="text-xs text-fg-muted">
-            {allChecked
-              ? "All items checked. Take a breath, then continue."
-              : "Check every item above to unlock live deployment."}
+            : "cursor-not-allowed border-border bg-bg-card opacity-60"
+        }`;
+        const inner = (
+          <>
+            <div>
+              <div className="font-display text-lg font-semibold">Ready to deploy</div>
+              <div className="text-xs text-fg-muted">
+                {allChecked
+                  ? "All items checked. Take a breath, then continue."
+                  : "Check every item above to unlock live deployment."}
+              </div>
+            </div>
+            <Rocket className="size-5 text-brand-hover" />
+          </>
+        );
+        return allChecked ? (
+          <Link href="/day-3/deploy" className={cls}>
+            {inner}
+          </Link>
+        ) : (
+          <div className={cls} aria-disabled="true">
+            {inner}
           </div>
-        </div>
-        <Rocket className="size-5 text-brand-hover" />
-      </Link>
+        );
+      })()}
 
       <CompleteButton lessonSlug={lesson.slug} completed={completed} backHref="/day-3" />
     </article>

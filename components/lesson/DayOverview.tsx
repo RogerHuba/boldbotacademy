@@ -77,57 +77,79 @@ export function DayOverview({ day, state }: { day: DayKey; state: StudentState }
           );
         })}
 
-        {meta.quizSlug && (
-          <Link
-            href={`${base}/quiz`}
-            className={`flex items-center gap-4 rounded-2xl border px-4 py-3 transition ${
-              allLessonsComplete
-                ? "border-brand/40 bg-brand/10 hover:bg-brand/20"
-                : "border-border bg-bg-card opacity-60"
-            }`}
-            onClick={(e) => !allLessonsComplete && e.preventDefault()}
-          >
-            <span className="grid size-8 shrink-0 place-items-center rounded-full bg-brand/20 text-brand-hover">
-              {quizPassed ? <Check className="size-4 text-success" /> : <GraduationCap className="size-4" />}
-            </span>
-            <div className="min-w-0 flex-1">
-              <div className="font-medium">{meta.label} Quiz</div>
-              <div className="text-xs text-fg-muted">
-                {quizPassed
-                  ? `Passed · best ${state.quizzes[meta.quizSlug]?.bestScore}%`
-                  : allLessonsComplete
-                    ? "Ready when you are."
-                    : "Finish all lessons above first."}
+        {meta.quizSlug && (() => {
+          const enabled = allLessonsComplete;
+          const inner = (
+            <>
+              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-brand/20 text-brand-hover">
+                {quizPassed ? <Check className="size-4 text-success" /> : <GraduationCap className="size-4" />}
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="font-medium">{meta.label} Quiz</div>
+                <div className="text-xs text-fg-muted">
+                  {quizPassed
+                    ? `Passed · best ${state.quizzes[meta.quizSlug!]?.bestScore}%`
+                    : enabled
+                      ? "Ready when you are."
+                      : "Finish all lessons above first."}
+                </div>
               </div>
+              {!quizPassed && enabled && <ArrowRight className="size-4" />}
+            </>
+          );
+          const className = `flex items-center gap-4 rounded-2xl border px-4 py-3 transition ${
+            enabled
+              ? "border-brand/40 bg-brand/10 hover:bg-brand/20"
+              : "cursor-not-allowed border-border bg-bg-card opacity-60"
+          }`;
+          return enabled ? (
+            <Link href={`${base}/quiz`} className={className}>
+              {inner}
+            </Link>
+          ) : (
+            <div className={className} aria-disabled="true">
+              {inner}
             </div>
-            {!quizPassed && allLessonsComplete && <ArrowRight className="size-4" />}
-          </Link>
-        )}
+          );
+        })()}
 
-        {meta.validationSlug && (
-          <Link
-            href={`${base}/validation`}
-            className={`flex items-center gap-4 rounded-2xl border px-4 py-3 transition ${
-              quizPassed ? "border-warning/40 bg-warning/10 hover:bg-warning/20" : "border-border bg-bg-card opacity-60"
-            }`}
-            onClick={(e) => !quizPassed && e.preventDefault()}
-          >
-            <span className="grid size-8 shrink-0 place-items-center rounded-full bg-warning/20 text-warning">
-              {validationApproved ? <Check className="size-4 text-success" /> : <FileCheck2 className="size-4" />}
-            </span>
-            <div className="min-w-0 flex-1">
-              <div className="font-medium">{meta.label} Validation</div>
-              <div className="text-xs text-fg-muted">
-                {validationApproved
-                  ? "All slots approved by the team."
-                  : "Upload screenshots — the team reviews and approves."}
+        {meta.validationSlug && (() => {
+          const enabled = quizPassed;
+          const inner = (
+            <>
+              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-warning/20 text-warning">
+                {validationApproved ? <Check className="size-4 text-success" /> : <FileCheck2 className="size-4" />}
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="font-medium">{meta.label} Validation</div>
+                <div className="text-xs text-fg-muted">
+                  {validationApproved
+                    ? "All slots approved by the team."
+                    : enabled
+                      ? "Upload screenshots — the team reviews and approves."
+                      : "Pass the quiz to unlock the validation portal."}
+                </div>
               </div>
+              {!validationApproved && enabled && (
+                <span className="chip chip-warning">{state.validations[meta.validationSlug!] ?? "pending"}</span>
+              )}
+            </>
+          );
+          const className = `flex items-center gap-4 rounded-2xl border px-4 py-3 transition ${
+            enabled
+              ? "border-warning/40 bg-warning/10 hover:bg-warning/20"
+              : "cursor-not-allowed border-border bg-bg-card opacity-60"
+          }`;
+          return enabled ? (
+            <Link href={`${base}/validation`} className={className}>
+              {inner}
+            </Link>
+          ) : (
+            <div className={className} aria-disabled="true">
+              {inner}
             </div>
-            {!validationApproved && quizPassed && (
-              <span className="chip chip-warning">{state.validations[meta.validationSlug] ?? "pending"}</span>
-            )}
-          </Link>
-        )}
+          );
+        })()}
       </div>
 
       <LockedHint day={day} state={state} />
