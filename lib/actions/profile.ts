@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { passwordError } from "@/lib/password";
 
 export type ProfileResult = { ok: true } | { ok: false; error: string };
 
@@ -39,15 +40,14 @@ export async function completeOnboarding(formData: FormData): Promise<ProfileRes
   if (!lastName) return { ok: false, error: "Last name is required." };
   if (!phone) return { ok: false, error: "Phone number is required." };
   if (!TIMEZONES.has(timezone)) return { ok: false, error: "Pick a valid timezone." };
-  if (newPassword.length < 8) {
-    return { ok: false, error: "Password must be at least 8 characters." };
-  }
+  const pwErr = passwordError(newPassword);
+  if (pwErr) return { ok: false, error: pwErr };
   if (newPassword !== confirmPassword) {
     return { ok: false, error: "Passwords do not match." };
   }
 
-  const { error: passwordError } = await supabase.auth.updateUser({ password: newPassword });
-  if (passwordError) return { ok: false, error: passwordError.message };
+  const { error: updateErr } = await supabase.auth.updateUser({ password: newPassword });
+  if (updateErr) return { ok: false, error: updateErr.message };
 
   const fullName = `${firstName} ${lastName}`.trim();
   const { error: profileError } = await supabase
@@ -108,9 +108,8 @@ export async function changePassword(formData: FormData): Promise<ProfileResult>
   const newPassword = String(formData.get("new_password") ?? "");
   const confirmPassword = String(formData.get("confirm_password") ?? "");
 
-  if (newPassword.length < 8) {
-    return { ok: false, error: "Password must be at least 8 characters." };
-  }
+  const pwErr = passwordError(newPassword);
+  if (pwErr) return { ok: false, error: pwErr };
   if (newPassword !== confirmPassword) {
     return { ok: false, error: "Passwords do not match." };
   }

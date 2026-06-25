@@ -5,7 +5,7 @@ type CookieToSet = { name: string; value: string; options?: CookieOptions };
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const PUBLIC = ["/", "/login", "/auth/callback"];
+  const PUBLIC = ["/", "/login", "/forgot-password", "/auth/callback"];
   const isPublic =
     PUBLIC.some((p) => path === p) || path.startsWith("/_next") || path.startsWith("/api/auth");
 

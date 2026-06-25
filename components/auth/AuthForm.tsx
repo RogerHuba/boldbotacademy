@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -40,7 +41,15 @@ export function AuthForm() {
         />
       </div>
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-fg-muted">Password</label>
+        <div className="mb-1.5 flex items-center justify-between">
+          <label className="block text-sm font-medium text-fg-muted">Password</label>
+          <Link
+            href="/forgot-password"
+            className="text-xs text-brand-hover hover:underline"
+          >
+            Forgot password?
+          </Link>
+        </div>
         <input
           type="password"
           required
