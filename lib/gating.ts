@@ -3,14 +3,24 @@ import { redirect } from "next/navigation";
 import { getStudentState, type StudentState } from "./progress";
 import type { DayKey } from "@/content/types";
 
-export async function requireStudent(): Promise<StudentState> {
+type StudentGateOpts = { allowUnonboarded?: boolean };
+
+export async function requireStudent(opts?: StudentGateOpts): Promise<StudentState> {
   const state = await getStudentState();
   if (!state) redirect("/login");
+  if (
+    !opts?.allowUnonboarded &&
+    state.role === "student" &&
+    !state.onboardedAt
+  ) {
+    redirect("/onboarding");
+  }
   return state;
 }
 
 export async function requireAdmin(): Promise<StudentState> {
-  const state = await requireStudent();
+  const state = await getStudentState();
+  if (!state) redirect("/login");
   if (state.role !== "admin" && state.role !== "staff") redirect("/dashboard");
   return state;
 }

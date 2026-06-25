@@ -1,6 +1,17 @@
 import { requireStudent } from "@/lib/gating";
 import { BADGES } from "@/content/badges";
-import { Flame, Trophy, GraduationCap, Award, Sparkles, BookOpen, Wrench, Activity, Rocket } from "lucide-react";
+import {
+  Flame,
+  Trophy,
+  GraduationCap,
+  Award,
+  Sparkles,
+  BookOpen,
+  Wrench,
+  Activity,
+  Rocket,
+} from "lucide-react";
+import { ProfileEditor } from "./ProfileEditor";
 
 const ICONS: Record<string, typeof Sparkles> = {
   Sparkles,
@@ -15,13 +26,14 @@ const ICONS: Record<string, typeof Sparkles> = {
 export default async function ProfilePage() {
   const state = await requireStudent();
   const earned = new Set(state.badges);
+  const firstName = state.fullName?.split(" ")[0] ?? "";
 
   return (
     <div className="mx-auto max-w-5xl space-y-8 animate-fade-in">
       <header className="space-y-2">
         <div className="text-xs font-semibold uppercase tracking-wider text-fg-subtle">You</div>
         <h1 className="font-display text-3xl font-semibold">Profile</h1>
-        <p className="text-fg-muted">Your account, your badges, your streak.</p>
+        <p className="text-fg-muted">Update your details, change your password, see your badges.</p>
       </header>
 
       <section className="grid gap-4 md:grid-cols-3">
@@ -40,7 +52,13 @@ export default async function ProfilePage() {
               </div>
             </div>
           </div>
-          <div className="text-xs text-fg-muted">Use the sign-out button in the top bar to log out.</div>
+          <ProfileEditor
+            email={state.email}
+            firstName={firstName}
+            lastName={state.lastName ?? ""}
+            phone={state.phone ?? ""}
+            timezone={state.timezone}
+          />
         </div>
 
         <div className="space-y-3">
@@ -68,9 +86,7 @@ export default async function ProfilePage() {
               <div
                 key={b.key}
                 className={
-                  got
-                    ? "card-raised border-brand/40"
-                    : "card-raised opacity-60"
+                  got ? "card-raised border-brand/40" : "card-raised opacity-60"
                 }
               >
                 <div className="flex items-center gap-3">

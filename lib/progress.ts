@@ -8,6 +8,10 @@ import type { DayKey } from "@/content/types";
 export type StudentState = {
   userId: string;
   fullName: string | null;
+  lastName: string | null;
+  phone: string | null;
+  timezone: string;
+  onboardedAt: string | null;
   email: string;
   role: "student" | "admin" | "staff";
   unlocked: Record<DayKey, boolean>;
@@ -144,6 +148,10 @@ export async function getStudentState(): Promise<StudentState | null> {
   return {
     userId: user.id,
     fullName: profile.data?.full_name ?? null,
+    lastName: profile.data?.last_name ?? null,
+    phone: profile.data?.phone ?? null,
+    timezone: profile.data?.timezone ?? "America/New_York",
+    onboardedAt: profile.data?.onboarded_at ?? null,
     email: profile.data?.email ?? user.email!,
     role: (profile.data?.role as "student" | "admin" | "staff") ?? "student",
     unlocked,

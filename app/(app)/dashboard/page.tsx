@@ -21,8 +21,6 @@ import {
   Megaphone,
   Calendar,
   Sparkles,
-  Trophy,
-  Flame,
   LifeBuoy,
 } from "lucide-react";
 import { dayCompletionPct } from "@/lib/progress";
@@ -52,16 +50,6 @@ export default async function DashboardPage() {
             : "Take it one module at a time. Future modules unlock as you finish each one."}
         </p>
       </header>
-
-      <div className="grid gap-4 md:grid-cols-3">
-        <Stat icon={<Sparkles className="size-4 text-brand-hover" />} label="Overall progress" value={`${state.overallPct}%`} />
-        <Stat icon={<Flame className="size-4 text-warning" />} label="Current streak" value={`${state.streak.current} day${state.streak.current === 1 ? "" : "s"}`} />
-        <Stat
-          icon={<Trophy className="size-4 text-success" />}
-          label="Certification status"
-          value={state.certified ? "Certified" : "In progress"}
-        />
-      </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="card-raised relative overflow-hidden">
@@ -228,18 +216,6 @@ export default async function DashboardPage() {
             );
           })}
         </div>
-      </div>
-    </div>
-  );
-}
-
-function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
-  return (
-    <div className="card flex items-center gap-3">
-      <div className="grid size-10 place-items-center rounded-xl bg-bg-raised">{icon}</div>
-      <div>
-        <div className="text-xs uppercase tracking-wider text-fg-subtle">{label}</div>
-        <div className="font-display text-xl font-semibold">{value}</div>
       </div>
     </div>
   );

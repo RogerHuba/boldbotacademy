@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Flame, LogOut } from "lucide-react";
+import { Flame, LogOut, Trophy, CircleDashed } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import type { StudentState } from "@/lib/progress";
 
@@ -24,14 +24,26 @@ export function Topbar({ state }: { state: StudentState }) {
           </div>
         </div>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         <span className="chip">
           <Flame className="size-3.5 text-warning" />
           {state.streak.current}-day streak
         </span>
+        {state.certified ? (
+          <span className="chip chip-success">
+            <Trophy className="size-3.5" />
+            Certified
+          </span>
+        ) : (
+          <span className="chip">
+            <CircleDashed className="size-3.5 text-fg-muted" />
+            In progress
+          </span>
+        )}
         <Link
           href="/profile"
-          className="flex items-center gap-2 rounded-xl border border-border bg-bg-card px-3 py-1.5"
+          className="flex items-center gap-2 rounded-xl border border-border bg-bg-card px-3 py-1.5 transition hover:border-brand/40"
+          title="Edit your profile"
         >
           <span className="grid size-7 place-items-center rounded-full bg-brand/20 text-xs font-semibold text-brand-hover">
             {(state.fullName ?? state.email)[0]?.toUpperCase()}
@@ -47,10 +59,11 @@ export function Topbar({ state }: { state: StudentState }) {
             router.push("/login");
             router.refresh();
           }}
-          className="btn-ghost"
-          aria-label="Sign out"
+          className="btn-ghost inline-flex items-center gap-2"
+          aria-label="Log off"
         >
           <LogOut className="size-4" />
+          <span className="hidden sm:inline">Logoff</span>
         </button>
       </div>
     </div>
