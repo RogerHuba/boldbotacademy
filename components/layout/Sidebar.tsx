@@ -13,6 +13,7 @@ import {
   User2,
   TrendingUp,
   FolderOpen,
+  Inbox,
   Menu,
   X,
 } from "lucide-react";
@@ -98,6 +99,13 @@ export function Sidebar({ state }: { state: StudentState }) {
             className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-fg-muted hover:bg-bg-hover hover:text-fg"
           >
             <LayoutDashboard className="size-4" />
+            Pipeline
+          </Link>
+          <Link
+            href="/admin/reviews"
+            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-fg-muted hover:bg-bg-hover hover:text-fg"
+          >
+            <Inbox className="size-4" />
             Review queue
           </Link>
           <Link
