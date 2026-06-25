@@ -1,4 +1,12 @@
-import type { Lesson } from "./types";
+import type { DayKey, Lesson } from "./types";
+
+const DAY_BASE: Record<DayKey, string> = {
+  day_0: "/day-0",
+  day_1: "/day-1",
+  day_1_setup: "/day-1/setup",
+  day_2: "/day-2",
+  day_3: "/day-3",
+};
 
 export const LESSONS: Lesson[] = [
   // ─────────────────────────────  DAY 0  ─────────────────────────────
@@ -307,4 +315,30 @@ export function getLesson(slug: string): Lesson | undefined {
 
 export function lessonsForDay(day: string): Lesson[] {
   return LESSONS.filter((l) => l.day === day);
+}
+
+export function lessonHref(lesson: Lesson): string {
+  const segment = lesson.slug.split(".").pop();
+  return `${DAY_BASE[lesson.day]}/${segment}`;
+}
+
+export type LessonNavigation = {
+  dayHref: string;
+  prev: { href: string; title: string } | null;
+  next: { href: string; title: string } | null;
+};
+
+export function getLessonNavigation(slug: string): LessonNavigation | null {
+  const lesson = getLesson(slug);
+  if (!lesson) return null;
+  const dayLessons = lessonsForDay(lesson.day);
+  const idx = dayLessons.findIndex((l) => l.slug === slug);
+  const prevLesson = idx > 0 ? dayLessons[idx - 1] : null;
+  const nextLesson =
+    idx >= 0 && idx < dayLessons.length - 1 ? dayLessons[idx + 1] : null;
+  return {
+    dayHref: DAY_BASE[lesson.day],
+    prev: prevLesson ? { href: lessonHref(prevLesson), title: prevLesson.title } : null,
+    next: nextLesson ? { href: lessonHref(nextLesson), title: nextLesson.title } : null,
+  };
 }
