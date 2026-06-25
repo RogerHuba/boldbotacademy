@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { requireStudent } from "@/lib/gating";
-import { TEAM } from "@/content/team";
-import { MessageSquare, Mail, Calendar, BookOpen } from "lucide-react";
+import { TEAM, TEAM_HOURS_NOTE } from "@/content/team";
+import { MessageSquare, Mail, Calendar, BookOpen, AlertTriangle, Clock } from "lucide-react";
 
 export default async function SupportPage() {
   await requireStudent();
+  const contactable = TEAM.filter((m) => !m.notContactable);
+  const doNotContact = TEAM.filter((m) => m.notContactable);
+
   return (
     <div className="mx-auto max-w-5xl space-y-8 animate-fade-in">
       <header className="space-y-2">
@@ -16,6 +19,11 @@ export default async function SupportPage() {
         </p>
       </header>
 
+      <div className="flex items-start gap-3 rounded-2xl border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-fg">
+        <Clock className="mt-0.5 size-4 text-warning" />
+        <p>{TEAM_HOURS_NOTE}</p>
+      </div>
+
       <section className="grid gap-4 md:grid-cols-2">
         <ChannelCard
           icon={MessageSquare}
@@ -26,8 +34,8 @@ export default async function SupportPage() {
         />
         <ChannelCard
           icon={Calendar}
-          title="Office Hours · Thu 4PM ET"
-          body="Weekly Zoom Q&A with Tyler. New cohort intros every week."
+          title="Weekly Zoom with Tyler"
+          body="Build a plan for your account. Tyler shares what has worked — diversify and stay slow & steady."
           cta="Join Zoom"
           href="https://zoom.us"
         />
@@ -51,7 +59,7 @@ export default async function SupportPage() {
       <section className="space-y-3">
         <h2 className="font-display text-xl font-semibold">Meet your team</h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {TEAM.map((m) => (
+          {contactable.map((m) => (
             <div key={m.id} className="card-raised flex flex-col gap-3">
               <div className="flex items-center gap-3">
                 <div
@@ -78,6 +86,37 @@ export default async function SupportPage() {
           ))}
         </div>
       </section>
+
+      {doNotContact.length > 0 && (
+        <section className="space-y-3">
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-warning">
+            <AlertTriangle className="size-4" />
+            Do not contact
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {doNotContact.map((m) => (
+              <div
+                key={m.id}
+                className="flex flex-col gap-2 rounded-2xl border border-warning/30 bg-warning/5 px-4 py-3"
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`grid size-10 place-items-center rounded-xl bg-gradient-to-br ${m.color} text-base font-semibold opacity-80`}
+                  >
+                    {m.initials}
+                  </div>
+                  <div>
+                    <div className="font-medium">{m.name}</div>
+                    <div className="text-xs text-fg-muted">{m.role}</div>
+                  </div>
+                </div>
+                <p className="text-sm text-fg-muted">{m.responsibilities}</p>
+                <div className="text-xs text-fg-subtle">{m.contact}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

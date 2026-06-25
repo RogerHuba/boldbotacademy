@@ -172,8 +172,8 @@ export default async function DashboardPage() {
         <SectionTitle icon={<LifeBuoy className="size-4 text-fg-muted" />}>
           Support contacts
         </SectionTitle>
-        <div className="mt-3 grid gap-3 md:grid-cols-5">
-          {TEAM.map((m) => (
+        <div className="mt-3 grid gap-3 md:grid-cols-4">
+          {TEAM.filter((m) => !m.notContactable).map((m) => (
             <Link
               key={m.id}
               href="/support"

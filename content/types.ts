@@ -73,4 +73,6 @@ export type TeamMember = {
   contact: string;
   initials: string;
   color: string;
+  notContactable?: boolean;
+  notContactableReason?: string;
 };
