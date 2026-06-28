@@ -12,7 +12,7 @@ const DAY_PATH: Record<DayKey, string> = {
   day_3: "/day-3",
 };
 import { LESSONS } from "@/content/lessons";
-import { ZOOM_SCHEDULE } from "@/content/announcements";
+import { LIVE_SCHEDULE } from "@/content/announcements";
 import { TEAM } from "@/content/team";
 import { BADGES } from "@/content/badges";
 import {
@@ -141,14 +141,17 @@ export default async function DashboardPage() {
 
         <div className="card">
           <SectionTitle icon={<Calendar className="size-4 text-success" />}>
-            Upcoming Zoom
+            Upcoming Events
           </SectionTitle>
+          <div className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-fg-subtle">
+            Live schedule (TickTock)
+          </div>
           <div className="mt-3 space-y-2">
-            {ZOOM_SCHEDULE.map((z) => (
+            {LIVE_SCHEDULE.map((z) => (
               <div key={z.id} className="rounded-xl border border-border bg-bg-raised px-3 py-2">
-                <div className="text-sm font-medium">{z.title}</div>
+                <div className="text-sm font-medium">{z.when}</div>
                 <div className="text-xs text-fg-muted">
-                  {z.when} · with {z.host}
+                  {z.host} · {z.handle}
                 </div>
               </div>
             ))}

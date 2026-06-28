@@ -1,5 +1,5 @@
-export const ZOOM_SCHEDULE = [
-  { id: "z1", title: "Office Hours · Open Q&A", when: "Thursday · 4:00 PM ET", host: "Tyler" },
-  { id: "z2", title: "Setup Lab · Day 1 deep-dive", when: "Friday · 12:00 PM ET", host: "Dan" },
-  { id: "z3", title: "BoxSeats Strategy Review", when: "Tuesday · 4:00 PM ET", host: "Tyler" },
+export const LIVE_SCHEDULE = [
+  { id: "live-am", when: "9:00 – 10:30 AM ET", host: "Jenn", handle: "@boldbot_jenn" },
+  { id: "live-mid", when: "10:30 AM – 12:00 PM ET", host: "Lauren", handle: "@live_boldbot" },
+  { id: "live-pm", when: "7:00 – 8:00 PM ET", host: "Tyler", handle: "@boldbot_backup" },
 ];
